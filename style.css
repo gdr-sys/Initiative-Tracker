@@ -1,0 +1,21 @@
+:root {
+  --bg-primary: #0d0d0d; --bg-secondary: #1a1a1a; --bg-tertiary: #242424;
+  --active-bg: #1a2a0d; --active-border: #4caf50; --active-glow: rgba(76, 175, 80, 0.3);
+  --hp-full: #4caf50; --hp-mid: #ff9800; --hp-low: #f44336; --hp-critical: #b71c1c; --hp-zero: #424242;
+  --color-hero: #4fc3f7; --color-villain: #ef5350; --color-neutral: #ffd54f; --color-summon: #ab47bc;
+  --text-primary: #ffffff; --text-secondary: #9e9e9e;
+  --font-display: 'Rajdhani', sans-serif; --font-body: 'Inter', sans-serif; --font-number: 'Orbitron', monospace;
+  --space-md: 16px; --radius-md: 10px;
+}
+
+body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-body); margin: 0; padding: var(--space-md); }
+
+.combatant-card { background: var(--bg-secondary); border-left: 5px solid var(--color-hero); padding: var(--space-md); margin-bottom: 8px; border-radius: var(--radius-md); }
+.combatant-card.active { background: var(--active-bg); border-color: var(--active-border); animation: activePulse 2s infinite; }
+
+.btn-next-turn { background: linear-gradient(135deg, #4caf50, #2e7d32); color: white; width: 100%; padding: 20px; border: none; border-radius: 10px; font-weight: 700; font-size: 1.5rem; cursor: pointer; }
+
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--bg-tertiary); padding: 10px 20px; border-radius: 20px; opacity: 0; transition: 0.3s; pointer-events: none; }
+.toast.visible { opacity: 1; }
+
+@keyframes activePulse { 0%, 100% { box-shadow: 0 0 10px rgba(76,175,80,0.2); } 50% { box-shadow: 0 0 25px rgba(76,175,80,0.5); } }
