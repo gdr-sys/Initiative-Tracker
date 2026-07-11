@@ -2,47 +2,37 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Initiative Tracker</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <header>
-        <div class="header-top">
+        <div class="header-main">
             <h1>INITIATIVE TRACKER</h1>
             <button id="btn-settings" class="btn-icon">⚙️</button>
         </div>
-        <div class="header-info">
-            <span id="round-display">Round: 1</span>
-            <span id="mode-display">Modalità: D&D</span>
+        <div class="header-sub">
+            <span id="round-display">Round: 1</span> | <span id="mode-display">D&D</span>
         </div>
     </header>
 
     <main id="app">
         <div id="active-banner" class="active-banner">
-            <div id="active-info">Nessun turno attivo</div>
+            <div id="active-name">NESSUN TURNO ATTIVO</div>
             <button id="btn-next" class="btn-next-turn">PROSSIMO TURNO</button>
         </div>
-
         <div id="combatant-list"></div>
-        
-        <div class="quick-actions">
-            <button id="btn-add" class="btn-primary">+ AGGIUNGI</button>
-        </div>
+        <button id="btn-add" class="btn-primary" style="margin-top: 1rem;">+ AGGIUNGI COMBATTENTE</button>
     </main>
 
-    <footer>
+    <footer id="footer">
         <p>Creato da Noemi Marcolini</p>
-        <div class="footer-links">
-            <a href="https://ko-fi.com/noemimarcolini" target="_blank">☕ Offrimi un caffè</a>
-            <a href="https://gdr-sys-portfolio2026.vercel.app/" target="_blank">🎲 Altri strumenti</a>
+        <div class="links">
+            <a href="https://ko-fi.com/noemimarcolini">☕ Ko-fi</a>
+            <a href="https://gdr-sys-portfolio2026.vercel.app/">🎲 Portfolio</a>
         </div>
     </footer>
-
-    <div id="toast" class="toast"></div>
-
     <script src="script.js"></script>
 </body>
 </html>
