@@ -3,6 +3,201 @@
 // Tutta la logica dell'app. Nessuna dipendenza esterna.
 // ============================================================
 
+// ============================================================
+// TRADUZIONI / TRANSLATIONS
+// ============================================================
+const translations = {
+  it: {
+    round: 'Round',
+    mode: 'Modalità',
+    acting_now: '▶ AGISCE ORA',
+    next_turn: '⏭️ Prossimo Turno',
+    restored: 'Combattimento precedente ripristinato',
+    empty_state: 'Nessun combattente. Aggiungi il primo per iniziare!',
+    add_button: '+ Aggiungi',
+    new_round_button: 'Nuovo Round',
+    new_combat_button: 'Nuovo Combattimento',
+    credit: 'Creato da Noemi Marcolini',
+    kofi_long: '☕ Offrimi un caffè',
+    portfolio_long: '🎲 Altri strumenti per GDR',
+    portfolio_short: '🎲 Altri tool GDR',
+    settings_title: 'Impostazioni',
+    add_title: 'Aggiungi',
+    name_label: 'Nome',
+    name_placeholder: 'Aldric il Guerriero',
+    type_label: 'Tipo',
+    type_hero: 'PG',
+    type_villain: 'Nemico',
+    type_neutral: 'Neutrale',
+    type_summon: 'Evocazione',
+    initiative_label: 'Iniziativa',
+    roll_d20: '🎲 Tira 1d20',
+    hp_label: 'HP',
+    hp_current_label: 'Attuali',
+    hp_max_label: 'Massimi',
+    add_multiple_label: 'Aggiungi Multipli',
+    add_multiple_hint: 'Utile per gruppi di nemici identici',
+    add_confirm: 'Aggiungi al Combattimento',
+    status_label: 'Status',
+    status_placeholder: 'Es. Avvelenato',
+    status_add: '+ Status',
+    notes_label: 'Note',
+    notes_placeholder: 'Note libere...',
+    mark_acted: '✓ Segna come Agito',
+    remove_combatant: '🗑️ Rimuovi dal Combattimento',
+    critical_x2: 'CRITICO x2',
+    apply: 'Applica',
+    cancel: 'Annulla',
+    language_label: 'Lingua',
+    mode_section_label: 'Modalità Iniziativa',
+    mode_dnd_title: 'D&D / Numerica',
+    mode_dnd_desc: 'Ordinamento per numero, turni individuali',
+    mode_fabula_title: 'Fabula Ultima / Alternata',
+    mode_fabula_desc: 'Turni alternati Eroi/Villain, nessun numero',
+    mode_pbta_title: 'PbtA / Spotlight',
+    mode_pbta_desc: 'Nessun ordine fisso, il Master decide',
+    options_label: 'Opzioni',
+    opt_sounds: 'Suoni',
+    opt_haptics: 'Vibrazione',
+    opt_animations: 'Animazioni',
+    opt_largescreen: 'Modalità schermo grande',
+    reset_label: 'Reset',
+    clear_all_button: 'Cancella Tutto e Ricomincia',
+    victory_title: '🏆 VITTORIA!',
+    victory_text: 'Tutti i nemici sono stati sconfitti.',
+    close: 'Chiudi',
+    // Stringhe dinamiche generate da JS
+    mode_short_dnd: 'D&D',
+    mode_short_fabula: 'Fabula Ultima',
+    mode_short_pbta: 'PbtA',
+    heroes_group: 'Eroi',
+    villains_group: 'Villain',
+    has_acted_suffix: ' — Ha Agito',
+    spotlight_on: '✨ In Spotlight',
+    spotlight_off: '💡 Illumina',
+    action_damage: '❤️ Danno',
+    action_heal: '💚 Cura',
+    action_acted: '✓ Agito',
+    toast_no_undo: 'Niente da annullare',
+    toast_undo_done: 'Azione annullata',
+    toast_added: 'Combattente aggiunto',
+    toast_removed: 'Combattente rimosso',
+    toast_name_required: 'Inserisci un nome',
+    toast_new_combat: 'Nuovo combattimento iniziato',
+    toast_clear_all: 'Tutto cancellato',
+    damage_to: 'Danno a',
+    heal_to: 'Cura a',
+    apply_damage_btn: 'Applica Danno',
+    apply_heal_btn: 'Applica Cura',
+    rounds_reached: 'Round raggiunti',
+    confirm_new_combat: 'Iniziare un nuovo combattimento? La lista attuale verrà svuotata.',
+    confirm_clear_all: 'Cancellare tutto e ricominciare da zero? Questa azione non è annullabile.'
+  },
+  en: {
+    round: 'Round',
+    mode: 'Mode',
+    acting_now: '▶ ACTING NOW',
+    next_turn: '⏭️ Next Turn',
+    restored: 'Previous combat restored',
+    empty_state: 'No combatants yet. Add the first one to get started!',
+    add_button: '+ Add',
+    new_round_button: 'New Round',
+    new_combat_button: 'New Combat',
+    credit: 'Created by Noemi Marcolini',
+    kofi_long: '☕ Buy me a coffee',
+    portfolio_long: '🎲 More RPG tools',
+    portfolio_short: '🎲 More RPG tools',
+    settings_title: 'Settings',
+    add_title: 'Add',
+    name_label: 'Name',
+    name_placeholder: 'Aldric the Warrior',
+    type_label: 'Type',
+    type_hero: 'PC',
+    type_villain: 'Enemy',
+    type_neutral: 'Neutral',
+    type_summon: 'Summon',
+    initiative_label: 'Initiative',
+    roll_d20: '🎲 Roll 1d20',
+    hp_label: 'HP',
+    hp_current_label: 'Current',
+    hp_max_label: 'Max',
+    add_multiple_label: 'Add Multiple',
+    add_multiple_hint: 'Useful for groups of identical enemies',
+    add_confirm: 'Add to Combat',
+    status_label: 'Status',
+    status_placeholder: 'E.g. Poisoned',
+    status_add: '+ Status',
+    notes_label: 'Notes',
+    notes_placeholder: 'Free notes...',
+    mark_acted: '✓ Mark as Acted',
+    remove_combatant: '🗑️ Remove from Combat',
+    critical_x2: 'CRITICAL x2',
+    apply: 'Apply',
+    cancel: 'Cancel',
+    language_label: 'Language',
+    mode_section_label: 'Initiative Mode',
+    mode_dnd_title: 'D&D / Numeric',
+    mode_dnd_desc: 'Numeric ordering, individual turns',
+    mode_fabula_title: 'Fabula Ultima / Alternating',
+    mode_fabula_desc: 'Alternating Hero/Villain turns, no numbers',
+    mode_pbta_title: 'PbtA / Spotlight',
+    mode_pbta_desc: 'No fixed order, the GM decides',
+    options_label: 'Options',
+    opt_sounds: 'Sounds',
+    opt_haptics: 'Vibration',
+    opt_animations: 'Animations',
+    opt_largescreen: 'Large screen mode',
+    reset_label: 'Reset',
+    clear_all_button: 'Clear Everything and Restart',
+    victory_title: '🏆 VICTORY!',
+    victory_text: 'All enemies have been defeated.',
+    close: 'Close',
+    mode_short_dnd: 'D&D',
+    mode_short_fabula: 'Fabula Ultima',
+    mode_short_pbta: 'PbtA',
+    heroes_group: 'Heroes',
+    villains_group: 'Villains',
+    has_acted_suffix: ' — Has Acted',
+    spotlight_on: '✨ In Spotlight',
+    spotlight_off: '💡 Spotlight',
+    action_damage: '❤️ Damage',
+    action_heal: '💚 Heal',
+    action_acted: '✓ Acted',
+    toast_no_undo: 'Nothing to undo',
+    toast_undo_done: 'Action undone',
+    toast_added: 'Combatant added',
+    toast_removed: 'Combatant removed',
+    toast_name_required: 'Enter a name',
+    toast_new_combat: 'New combat started',
+    toast_clear_all: 'Everything cleared',
+    damage_to: 'Damage to',
+    heal_to: 'Heal to',
+    apply_damage_btn: 'Apply Damage',
+    apply_heal_btn: 'Apply Heal',
+    rounds_reached: 'Rounds reached',
+    confirm_new_combat: 'Start a new combat? The current list will be cleared.',
+    confirm_clear_all: 'Clear everything and start from scratch? This cannot be undone.'
+  }
+};
+
+function t(key) {
+  const lang = state.settings.lang || 'it';
+  return (translations[lang] && translations[lang][key]) || translations.it[key] || key;
+}
+
+function applyStaticTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+  document.documentElement.lang = state.settings.lang || 'it';
+}
+
 // ---------------- STATO GLOBALE ----------------
 const state = {
   mode: 'dnd',                    // 'dnd' | 'fabula' | 'pbta'
@@ -15,7 +210,8 @@ const state = {
     sounds: true,
     haptics: true,
     animations: true,
-    largeScreen: false
+    largeScreen: false,
+    lang: 'it'
   }
 };
 
@@ -61,7 +257,7 @@ function pushHistory() {
 
 function undo() {
   if (state.history.length === 0) {
-    showToast('Niente da annullare');
+    showToast(t('toast_no_undo'));
     return;
   }
   const previous = state.history.pop();
@@ -70,7 +266,7 @@ function undo() {
   state.activeIndex = previous.activeIndex;
   render();
   saveState();
-  showToast('Azione annullata');
+  showToast(t('toast_undo_done'));
 }
 
 // ---------------- UTILITY ----------------
@@ -149,7 +345,7 @@ function addCombatant(data) {
   sortCombatants();
   render();
   saveState();
-  showToast('Combattente aggiunto');
+  showToast(t('toast_added'));
 }
 
 function removeCombatant(id) {
@@ -158,7 +354,7 @@ function removeCombatant(id) {
   if (state.activeIndex >= state.combatants.length) state.activeIndex = 0;
   render();
   saveState();
-  showToast('Combattente rimosso');
+  showToast(t('toast_removed'));
 }
 
 function sortCombatants() {
@@ -189,7 +385,7 @@ function applyDamage(id, amount) {
   }
   render();
   saveState();
-  showToast(`-${amount} HP a ${c.name}`, 'damage');
+  showToast(`-${amount} HP ${state.settings.lang === 'en' ? 'to' : 'a'} ${c.name}`, 'damage');
   flashCard(id, 'damage-taken');
   checkVictory();
 }
@@ -203,7 +399,7 @@ function applyHeal(id, amount) {
   playSound('heal');
   render();
   saveState();
-  showToast(`+${amount} HP a ${c.name}`, 'heal');
+  showToast(`+${amount} HP ${state.settings.lang === 'en' ? 'to' : 'a'} ${c.name}`, 'heal');
   flashCard(id, 'healed');
 }
 
@@ -309,7 +505,7 @@ function checkVictory() {
   if (villains.length > 0 && villains.every(c => c.isKO)) {
     setTimeout(() => {
       const summary = document.getElementById('victory-summary');
-      summary.innerHTML = `<p>Round raggiunti: ${state.round}</p>`;
+      summary.innerHTML = `<p>${t('rounds_reached')}: ${state.round}</p>`;
       openModal('modal-victory');
       vibrate([100, 50, 100, 50, 200]);
     }, 400);
@@ -318,8 +514,9 @@ function checkVictory() {
 
 // ---------------- RENDER ----------------
 function render() {
+  applyStaticTranslations();
   document.getElementById('round-value').textContent = state.round;
-  const modeLabels = { dnd: 'D&D', fabula: 'Fabula Ultima', pbta: 'PbtA' };
+  const modeLabels = { dnd: t('mode_short_dnd'), fabula: t('mode_short_fabula'), pbta: t('mode_short_pbta') };
   document.getElementById('mode-value').textContent = modeLabels[state.mode];
 
   document.body.classList.toggle('large-screen', state.settings.largeScreen);
@@ -383,13 +580,13 @@ function renderFabulaGroups(listEl) {
 
   const heroLabel = document.createElement('div');
   heroLabel.className = 'combatant-group-label';
-  heroLabel.textContent = 'Eroi';
+  heroLabel.textContent = t('heroes_group');
   listEl.appendChild(heroLabel);
   heroes.forEach((c, idx) => listEl.appendChild(buildCombatantCard(c, idx)));
 
   const villainLabel = document.createElement('div');
   villainLabel.className = 'combatant-group-label';
-  villainLabel.textContent = 'Villain';
+  villainLabel.textContent = t('villains_group');
   listEl.appendChild(villainLabel);
   villains.forEach((c, idx) => listEl.appendChild(buildCombatantCard(c, idx)));
 }
@@ -408,14 +605,14 @@ function buildCombatantCard(c, idx) {
   if (c.hasActed && state.mode !== 'pbta') card.classList.add('acted');
   if (c.isKO) card.classList.add('ko');
 
-  const typeLabels = { hero: 'PG', villain: 'Nemico', neutral: 'Neutrale', summon: 'Evocazione' };
+  const typeLabels = { hero: t('type_hero'), villain: t('type_villain'), neutral: t('type_neutral'), summon: t('type_summon') };
 
   let topRow = `
     <div class="combatant-top-row">
       <span class="combatant-type-badge" data-type="${c.type}"></span>
       <span class="combatant-name">${escapeHtml(c.name)}</span>
     </div>
-    <div class="combatant-subtitle">${typeLabels[c.type]}${c.hasActed && state.mode !== 'pbta' ? ' — Ha Agito' : ''}</div>
+    <div class="combatant-subtitle">${typeLabels[c.type]}${c.hasActed && state.mode !== 'pbta' ? t('has_acted_suffix') : ''}</div>
   `;
 
   let initHtml = '';
@@ -444,12 +641,12 @@ function buildCombatantCard(c, idx) {
   let actionsHtml = '';
   if (state.mode === 'pbta') {
     actionsHtml = `<div class="combatant-actions-row">
-      <button class="action-chip action-spotlight" data-action="spotlight">${isSpotlight ? '✨ In Spotlight' : '💡 Illumina'}</button>
+      <button class="action-chip action-spotlight" data-action="spotlight">${isSpotlight ? t('spotlight_on') : t('spotlight_off')}</button>
     </div>`;
   } else {
     actionsHtml = `<div class="combatant-actions-row">
-      ${c.hp ? '<button class="action-chip action-damage" data-action="damage">❤️ Danno</button><button class="action-chip action-heal" data-action="heal">💚 Cura</button>' : ''}
-      <button class="action-chip action-acted" data-action="acted">✓ Agito</button>
+      ${c.hp ? `<button class="action-chip action-damage" data-action="damage">${t('action_damage')}</button><button class="action-chip action-heal" data-action="heal">${t('action_heal')}</button>` : ''}
+      <button class="action-chip action-acted" data-action="acted">${t('action_acted')}</button>
     </div>`;
   }
 
@@ -508,7 +705,7 @@ function openAddModal() {
 function confirmAddCombatant() {
   const name = document.getElementById('input-name').value.trim();
   if (!name) {
-    showToast('Inserisci un nome');
+    showToast(t('toast_name_required'));
     return;
   }
   const type = document.querySelector('input[name="type"]:checked').value;
@@ -530,10 +727,10 @@ function openDetailModal(id) {
   activeCombatantId = id;
   const c = state.combatants.find(x => x.id === id);
   if (!c) return;
-  const typeLabels = { hero: 'PG', villain: 'Nemico', neutral: 'Neutrale', summon: 'Evocazione' };
+  const typeLabels = { hero: t('type_hero'), villain: t('type_villain'), neutral: t('type_neutral'), summon: t('type_summon') };
 
   document.getElementById('detail-name').textContent = c.name;
-  document.getElementById('detail-subtitle').textContent = typeLabels[c.type] + (c.initiative !== null ? ` — Iniziativa ${c.initiative}` : '');
+  document.getElementById('detail-subtitle').textContent = typeLabels[c.type] + (c.initiative !== null ? ` — ${t('initiative_label')} ${c.initiative}` : '');
 
   const hpBlock = document.getElementById('detail-hp-block');
   if (c.hp) {
@@ -579,11 +776,11 @@ function openDamageSheet(id, isHeal) {
   damageAmount = 1;
   const c = state.combatants.find(x => x.id === id);
   if (!c || !c.hp) return;
-  document.getElementById('damage-title').textContent = `${isHeal ? 'Cura a' : 'Danno a'}: ${c.name}`;
+  document.getElementById('damage-title').textContent = `${isHeal ? t('heal_to') : t('damage_to')}: ${c.name}`;
   document.getElementById('damage-current-hp').textContent = `${c.hp.current} / ${c.hp.max}`;
   document.getElementById('dmg-amount').textContent = damageAmount;
   const applyBtn = document.getElementById('btn-apply-damage');
-  applyBtn.textContent = isHeal ? 'Applica Cura' : 'Applica Danno';
+  applyBtn.textContent = isHeal ? t('apply_heal_btn') : t('apply_damage_btn');
   applyBtn.className = isHeal ? 'btn-primary' : 'btn-primary';
   applyBtn.style.background = isHeal ? '#4caf50' : '#f44336';
   openModal('modal-damage');
@@ -614,11 +811,20 @@ function attachEvents() {
 
   document.getElementById('btn-settings').addEventListener('click', () => {
     document.querySelector(`input[name="mode"][value="${state.mode}"]`).checked = true;
+    document.querySelector(`input[name="lang"][value="${state.settings.lang || 'it'}"]`).checked = true;
     document.getElementById('opt-sounds').checked = state.settings.sounds;
     document.getElementById('opt-haptics').checked = state.settings.haptics;
     document.getElementById('opt-animations').checked = state.settings.animations;
     document.getElementById('opt-largescreen').checked = state.settings.largeScreen;
     openModal('modal-settings');
+  });
+
+  document.querySelectorAll('input[name="lang"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      state.settings.lang = radio.value;
+      render();
+      saveState();
+    });
   });
 
   document.querySelectorAll('input[name="mode"]').forEach(radio => {
@@ -739,7 +945,7 @@ function attachEvents() {
 }
 
 function confirmNewCombat() {
-  if (state.combatants.length > 0 && !confirm('Iniziare un nuovo combattimento? La lista attuale verrà svuotata.')) return;
+  if (state.combatants.length > 0 && !confirm(t('confirm_new_combat'))) return;
   pushHistory();
   state.combatants = [];
   state.round = 1;
@@ -748,11 +954,11 @@ function confirmNewCombat() {
   render();
   saveState();
   closeModal('modal-settings');
-  showToast('Nuovo combattimento iniziato');
+  showToast(t('toast_new_combat'));
 }
 
 function confirmClearAll() {
-  if (!confirm('Cancellare tutto e ricominciare da zero? Questa azione non è annullabile.')) return;
+  if (!confirm(t('confirm_clear_all'))) return;
   localStorage.removeItem(STORAGE_KEY);
   state.combatants = [];
   state.round = 1;
@@ -761,7 +967,7 @@ function confirmClearAll() {
   state.history = [];
   render();
   closeModal('modal-settings');
-  showToast('Tutto cancellato');
+  showToast(t('toast_clear_all'));
 }
 
 // ---------------- INIZIALIZZAZIONE ----------------
