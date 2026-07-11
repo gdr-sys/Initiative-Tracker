@@ -1,38 +1,80 @@
 # Initiative Tracker
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Stack](https://img.shields.io/badge/stack-Vanilla_JS-yellow.svg)
-![Platform](https://img.shields.io/badge/platform-Web-lightgrey.svg)
-[![Ko-Fi](https://img.shields.io/badge/Ko--fi-Offrimi_un_caffè-red?logo=kofi)](https://ko-fi.com/noemimarcolini)
+![No Build Step](https://img.shields.io/badge/build-none-brightgreen)
+![Vanilla JS](https://img.shields.io/badge/JavaScript-Vanilla-f7df1e?logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![License](https://img.shields.io/badge/license-Free%20to%20use-blue)
+![Languages](https://img.shields.io/badge/lang-IT%20%7C%20EN-orange)
+![Ko--fi](https://img.shields.io/badge/Ko--fi-Support-FF5E5B?logo=ko-fi&logoColor=white)
 
-Un tool web ultra-leggero e performante per il tracciamento dell'iniziativa nei GDR da tavolo. Progettato per master che necessitano di velocità, leggibilità in condizioni di scarsa luce e zero configurazione.
+A universal initiative tracker for tabletop RPGs. Built for speed at the table: add a combatant, change HP, and pass the turn in 1–2 taps. Optimized for use on a smartphone by the GM or on a shared tablet, in the low light typical of a game table.
 
-## 🚀 Come usare
-1. Scarica i file del progetto.
-2. Apri `index.html` direttamente nel tuo browser (Chrome, Firefox, Safari).
-3. **Fine!** Non serve alcun server, build step o installazione.
+Available in **Italian and English** — switch language anytime from Settings (⚙️).
 
-## ⚙️ Funzionalità per modalità
-Il tracker si adatta al tuo sistema di gioco preferito:
-*   **D&D / Numerica:** Ordinamento automatico per iniziativa, gestione round, indicatore turno.
-*   **Fabula Ultima / Alternata:** Suddivisione Eroi/Villain, sistema a turni alternati.
-*   **PbtA / Spotlight:** Gestione libera basata sullo "Spotlight" del Master.
+Supports three initiative systems:
+- **D&D / Numeric** — classic numeric initiative order, individual turns
+- **Fabula Ultima / Alternating** — turns alternate between Heroes and Villains, no initiative numbers
+- **PbtA / Spotlight** — no fixed order; the GM taps to spotlight whoever acts
 
-## ⌨️ Scorciatoie da tastiera
-*   `Spazio` / `Enter`: Prossimo turno
-*   `N`: Nuovo round
-*   `A`: Apri modal "Aggiungi combattente"
-*   `Esc`: Chiudi modal/pannello
-*   `Ctrl + Z`: Undo ultima azione
+## How to use
 
-## 💾 LocalStorage
-Il tool salva automaticamente lo stato del combattimento nel browser. Se chiudi la pagina o il browser crasha, al riavvio troverai esattamente la lista dei combattenti e lo stato del round come li hai lasciati.
+Open `index.html` in any modern browser. That's it — no installation, no build step, no server required. Works fully offline after the first load (fonts are cached by the browser).
 
-## 🛠️ Crediti
-**Creato da Noemi Marcolini**
-*   [Portfolio GDR](https://gdr-sys-portfolio2026.vercel.app/)
-*   [Offrimi un caffè su Ko-fi](https://ko-fi.com/noemimarcolini)
+## File structure
 
-## 📄 Licenza
-Progetto rilasciato sotto licenza MIT.
+```
+initiative-tracker/
+├── index.html        Markup for the app, all modals and screens
+├── style.css          Full design system and styling
+├── script.js          All application logic and state management
+├── README.md          This file
+└── DEVELOPMENT.md      Full technical documentation for continuing development
+```
+
+## Features by mode
+
+**D&D / Numeric**
+- Combatants sorted automatically by initiative (highest to lowest)
+- "Next Turn" advances through the list; a new round starts automatically when everyone has acted
+- Combatants who acted are dimmed
+- Roll 1d20 directly in the add-combatant form
+- KO'd combatants are skipped automatically
+
+**Fabula Ultima / Alternating**
+- Combatants split into "Heroes" and "Villains" sections
+- No initiative numbers — players/GM freely choose who acts
+- Checkmark shows who has acted this round
+
+**PbtA / Spotlight**
+- Free-form list, no automatic turn order
+- Tap "Illumina" to spotlight a character
+- HP and initiative are optional in this mode
+
+## Keyboard shortcuts
+
+| Key | Action |
+|---|---|
+| Space / Enter | Next turn |
+| N | New round |
+| A | Open "Add combatant" |
+| Escape | Close open modal/panel |
+| Ctrl+Z (Cmd+Z) | Undo last action |
+| 1–9 | Scroll to combatant at that position |
+
+## LocalStorage
+
+The entire app state (combatants, round, mode, settings) is saved to `localStorage` under the key `initiative_tracker_state` after every change. On reload, your combat is automatically restored and a small banner confirms it. Use "Nuovo Combattimento" to clear the current fight, or "Cancella Tutto e Ricomincia" in Settings to wipe everything and start fresh.
+
+No data ever leaves your browser — nothing is sent to any server.
+
+## Credits
+
+Created by **Noemi Marcolini**
+
+- ☕ [Support on Ko-fi](https://ko-fi.com/noemimarcolini)
+- 🎲 [More RPG tools](https://gdr-sys-portfolio2026.vercel.app/)
+
+## License
+
+Free to use, modify, and share for personal and non-commercial tabletop use.
