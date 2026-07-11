@@ -28,8 +28,7 @@ initiative-tracker/
 ├── index.html        Markup for the app, all modals and screens
 ├── style.css          Full design system and styling
 ├── script.js          All application logic and state management
-├── README.md          This file
-└── DEVELOPMENT.md      Full technical documentation for continuing development
+└── README.md          This file
 ```
 
 ## Features by mode
