@@ -1,38 +1,256 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Initiative Tracker</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Initiative Tracker</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="header-main">
-            <h1>INITIATIVE TRACKER</h1>
-            <button id="btn-settings" class="btn-icon">⚙️</button>
-        </div>
-        <div class="header-sub">
-            <span id="round-display">Round: 1</span> | <span id="mode-display">D&D</span>
-        </div>
-    </header>
 
-    <main id="app">
-        <div id="active-banner" class="active-banner">
-            <div id="active-name">NESSUN TURNO ATTIVO</div>
-            <button id="btn-next" class="btn-next-turn">PROSSIMO TURNO</button>
-        </div>
-        <div id="combatant-list"></div>
-        <button id="btn-add" class="btn-primary" style="margin-top: 1rem;">+ AGGIUNGI COMBATTENTE</button>
-    </main>
+  <!-- ===================== HEADER ===================== -->
+  <header class="app-header">
+    <div class="header-top">
+      <h1 class="app-title">Initiative Tracker</h1>
+      <button class="btn-icon" id="btn-settings" title="Impostazioni">⚙️</button>
+    </div>
+    <div class="header-stats">
+      <div class="stat-round">
+        <span class="stat-label">Round</span>
+        <span class="stat-value" id="round-value">1</span>
+      </div>
+      <div class="stat-mode">
+        <span class="stat-label">Modalità</span>
+        <span class="stat-value" id="mode-value">D&amp;D</span>
+      </div>
+    </div>
+  </header>
 
-    <footer id="footer">
-        <p>Creato da Noemi Marcolini</p>
-        <div class="links">
-            <a href="https://ko-fi.com/noemimarcolini">☕ Ko-fi</a>
-            <a href="https://gdr-sys-portfolio2026.vercel.app/">🎲 Portfolio</a>
+  <!-- ===================== BANNER TURNO ATTIVO (solo D&D/Fabula) ===================== -->
+  <section class="active-banner" id="active-banner" style="display:none;">
+    <div class="active-banner-label">▶ AGISCE ORA</div>
+    <div class="active-banner-name" id="active-banner-name">—</div>
+    <div class="active-banner-hp" id="active-banner-hp"></div>
+    <button class="btn-next-turn" id="btn-next-turn">⏭️ Prossimo Turno</button>
+  </section>
+
+  <!-- ===================== RESTORE BANNER ===================== -->
+  <div class="restore-banner" id="restore-banner" style="display:none;">
+    Combattimento precedente ripristinato
+  </div>
+
+  <!-- ===================== LISTA COMBATTENTI ===================== -->
+  <main class="combatant-list-wrap">
+    <div id="combatant-list" class="combatant-list"></div>
+    <div class="empty-state" id="empty-state">
+      <p>Nessun combattente. Aggiungi il primo per iniziare!</p>
+    </div>
+  </main>
+
+  <!-- ===================== AZIONI RAPIDE ===================== -->
+  <section class="quick-actions">
+    <button class="btn-primary" id="btn-add-open">+ Aggiungi</button>
+    <button class="btn-secondary" id="btn-new-round">Nuovo Round</button>
+    <button class="btn-danger" id="btn-new-combat">Nuovo Combattimento</button>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="app-footer">
+    <p>Creato da Noemi Marcolini</p>
+    <div class="footer-links">
+      <a href="https://ko-fi.com/noemimarcolini" target="_blank" rel="noopener">☕ Offrimi un caffè</a>
+      <a href="https://gdr-sys-portfolio2026.vercel.app/" target="_blank" rel="noopener">🎲 Altri strumenti per GDR</a>
+    </div>
+  </footer>
+
+  <!-- ===================== TOAST ===================== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===================== ROUND BANNER (overlay) ===================== -->
+  <div class="round-banner-overlay" id="round-banner-overlay">
+    <div class="round-banner-text" id="round-banner-text">ROUND 1!</div>
+  </div>
+
+  <!-- ===================== MODAL: AGGIUNGI COMBATTENTE ===================== -->
+  <div class="modal-overlay" id="modal-add">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Aggiungi</h2>
+        <button class="btn-icon" data-close-modal="modal-add">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="field-label">Nome</label>
+        <input type="text" class="input-field" id="input-name" placeholder="Aldric il Guerriero">
+
+        <label class="field-label">Tipo</label>
+        <div class="radio-group" id="type-group">
+          <label class="radio-pill"><input type="radio" name="type" value="hero" checked><span>PG</span></label>
+          <label class="radio-pill"><input type="radio" name="type" value="villain"><span>Nemico</span></label>
+          <label class="radio-pill"><input type="radio" name="type" value="neutral"><span>Neutrale</span></label>
+          <label class="radio-pill"><input type="radio" name="type" value="summon"><span>Evocazione</span></label>
         </div>
-    </footer>
-    <script src="script.js"></script>
+
+        <div id="init-field-group">
+          <label class="field-label">Iniziativa</label>
+          <div class="inline-field-row">
+            <input type="number" class="input-field" id="input-initiative" placeholder="18">
+            <button class="btn-secondary btn-roll" id="btn-roll-d20">🎲 Tira 1d20</button>
+          </div>
+        </div>
+
+        <div id="hp-field-group">
+          <label class="field-label">HP</label>
+          <div class="inline-field-row">
+            <div class="field-col">
+              <span class="field-sublabel">Attuali</span>
+              <input type="number" class="input-field" id="input-hp-current" placeholder="28">
+            </div>
+            <div class="field-col">
+              <span class="field-sublabel">Massimi</span>
+              <input type="number" class="input-field" id="input-hp-max" placeholder="45">
+            </div>
+          </div>
+        </div>
+
+        <label class="field-label">Aggiungi Multipli</label>
+        <span class="field-hint">Utile per gruppi di nemici identici</span>
+        <input type="number" class="input-field" id="input-count" min="1" value="1">
+
+        <button class="btn-primary" id="btn-confirm-add">Aggiungi al Combattimento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: SCHEDA COMBATTENTE ESPANSA ===================== -->
+  <div class="modal-overlay" id="modal-detail">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="detail-name">Nome</h2>
+        <button class="btn-icon" data-close-modal="modal-detail">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-subtitle" id="detail-subtitle"></div>
+
+        <div id="detail-hp-block">
+          <div class="hp-text-large" id="detail-hp-text">28 / 45</div>
+          <div class="hp-bar-container">
+            <div class="hp-bar-fill" id="detail-hp-bar"></div>
+          </div>
+
+          <div class="counter-control counter-hp-quick">
+            <button class="counter-btn minus" data-hp-delta="-10">−10</button>
+            <button class="counter-btn minus" data-hp-delta="-5">−5</button>
+            <button class="counter-btn minus" data-hp-delta="-1">−1</button>
+            <span class="counter-value" id="detail-hp-current-value">28</span>
+            <button class="counter-btn plus" data-hp-delta="1">+1</button>
+            <button class="counter-btn plus" data-hp-delta="5">+5</button>
+            <button class="counter-btn plus" data-hp-delta="10">+10</button>
+          </div>
+
+          <div class="max-hp-row">
+            <span class="field-sublabel">HP Massimi</span>
+            <div class="counter-control">
+              <button class="counter-btn minus" data-hpmax-delta="-1">−</button>
+              <span class="counter-value" id="detail-hp-max-value">45</span>
+              <button class="counter-btn plus" data-hpmax-delta="1">+</button>
+            </div>
+          </div>
+        </div>
+
+        <label class="field-label">Status</label>
+        <div class="status-list" id="detail-status-list"></div>
+        <div class="inline-field-row">
+          <input type="text" class="input-field" id="input-new-status" placeholder="Es. Avvelenato">
+          <button class="btn-secondary" id="btn-add-status">+ Status</button>
+        </div>
+
+        <label class="field-label">Iniziativa</label>
+        <input type="number" class="input-field" id="detail-initiative-input">
+
+        <label class="field-label">Note</label>
+        <textarea class="input-field" id="detail-notes" rows="2" placeholder="Note libere..."></textarea>
+
+        <button class="btn-secondary" id="btn-mark-acted">✓ Segna come Agito</button>
+        <button class="btn-danger" id="btn-remove-combatant">🗑️ Rimuovi dal Combattimento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== BOTTOM SHEET: DANNO/CURA ===================== -->
+  <div class="modal-overlay" id="modal-damage">
+    <div class="bottom-sheet">
+      <div class="bottom-sheet-header">
+        <span id="damage-title">Danno a: Aldric</span>
+        <span id="damage-current-hp">28 / 45</span>
+      </div>
+      <div class="counter-control counter-center">
+        <button class="counter-btn minus" id="dmg-decrease">−</button>
+        <span class="counter-value" id="dmg-amount">1</span>
+        <button class="counter-btn plus" id="dmg-increase">+</button>
+      </div>
+      <div class="dmg-presets">
+        <button class="btn-preset" data-dmg-preset="5">5</button>
+        <button class="btn-preset" data-dmg-preset="10">10</button>
+        <button class="btn-preset" data-dmg-preset="15">15</button>
+        <button class="btn-preset" data-dmg-preset="20">20</button>
+        <button class="btn-preset btn-preset-crit" id="btn-dmg-crit">CRITICO x2</button>
+      </div>
+      <button class="btn-primary" id="btn-apply-damage">Applica</button>
+      <button class="btn-secondary" data-close-modal="modal-damage">Annulla</button>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: IMPOSTAZIONI ===================== -->
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Impostazioni</h2>
+        <button class="btn-icon" data-close-modal="modal-settings">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="field-label">Modalità Iniziativa</label>
+        <div class="mode-option" data-mode="dnd">
+          <label class="radio-row"><input type="radio" name="mode" value="dnd" checked><span><strong>D&amp;D / Numerica</strong><br><small>Ordinamento per numero, turni individuali</small></span></label>
+        </div>
+        <div class="mode-option" data-mode="fabula">
+          <label class="radio-row"><input type="radio" name="mode" value="fabula"><span><strong>Fabula Ultima / Alternata</strong><br><small>Turni alternati Eroi/Villain, nessun numero</small></span></label>
+        </div>
+        <div class="mode-option" data-mode="pbta">
+          <label class="radio-row"><input type="radio" name="mode" value="pbta"><span><strong>PbtA / Spotlight</strong><br><small>Nessun ordine fisso, il Master decide</small></span></label>
+        </div>
+
+        <label class="field-label">Opzioni</label>
+        <label class="checkbox-row"><input type="checkbox" id="opt-sounds" checked> Suoni</label>
+        <label class="checkbox-row"><input type="checkbox" id="opt-haptics" checked> Vibrazione</label>
+        <label class="checkbox-row"><input type="checkbox" id="opt-animations" checked> Animazioni</label>
+        <label class="checkbox-row"><input type="checkbox" id="opt-largescreen"> Modalità schermo grande</label>
+
+        <label class="field-label">Reset</label>
+        <button class="btn-secondary" id="btn-settings-new-combat">Nuovo Combattimento</button>
+        <button class="btn-danger" id="btn-settings-clear-all">Cancella Tutto e Ricomincia</button>
+
+        <div class="about-section">
+          <hr>
+          <p class="about-credit">Creato da Noemi Marcolini</p>
+          <div class="footer-links">
+            <a href="https://ko-fi.com/noemimarcolini" target="_blank" rel="noopener">☕ Ko-fi</a>
+            <a href="https://gdr-sys-portfolio2026.vercel.app/" target="_blank" rel="noopener">🎲 Altri tool GDR</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: VITTORIA ===================== -->
+  <div class="modal-overlay" id="modal-victory">
+    <div class="modal-box victory-box">
+      <h2 class="victory-title">🏆 VITTORIA!</h2>
+      <p>Tutti i nemici sono stati sconfitti.</p>
+      <div id="victory-summary"></div>
+      <button class="btn-primary" data-close-modal="modal-victory">Chiudi</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
