@@ -1,34 +1,32 @@
 const state = {
-  mode: 'dnd',
-  round: 1,
-  combatants: [],
-  history: []
+    mode: 'dnd',
+    round: 1,
+    activeIndex: 0,
+    combatants: []
 };
 
-function saveState() {
-  localStorage.setItem('initiative_tracker_state', JSON.stringify(state));
-}
-
-function loadState() {
-  const saved = localStorage.getItem('initiative_tracker_state');
-  if (saved) Object.assign(state, JSON.parse(saved));
-  render();
-}
-
 function render() {
-  const list = document.getElementById('combatant-list');
-  list.innerHTML = state.combatants.map(c => `
-    <div class="combatant-card ${state.combatants.indexOf(c) === state.activeIndex ? 'active' : ''}">
-      <div class="combatant-name">${c.name}</div>
-      <div class="hp-text">HP: ${c.hp.current}/${c.hp.max}</div>
-    </div>
-  `).join('');
+    const list = document.getElementById('combatant-list');
+    list.innerHTML = state.combatants.map((c, i) => `
+        <div class="combatant-card ${i === state.activeIndex ? 'active' : ''}">
+            <div>
+                <div class="combatant-name">${c.name}</div>
+                <div>HP: ${c.hp}</div>
+            </div>
+            <div class="initiative">${c.init}</div>
+        </div>
+    `).join('');
+    document.getElementById('round-display').innerText = `Round: ${state.round}`;
 }
 
 document.getElementById('btn-next').addEventListener('click', () => {
-  // Logica next turn
-  render();
-  saveState();
+    state.activeIndex = (state.activeIndex + 1) % state.combatants.length;
+    if (state.activeIndex === 0) state.round++;
+    render();
+    localStorage.setItem('initiative_data', JSON.stringify(state));
 });
 
-loadState();
+// Caricamento iniziale
+const saved = localStorage.getItem('initiative_data');
+if (saved) Object.assign(state, JSON.parse(saved));
+render();
