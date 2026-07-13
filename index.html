@@ -1,262 +1,85 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Initiative Tracker</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiative Tracker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <h1>🎲 Initiative Tracker</h1>
 
-  <!-- ===================== HEADER ===================== -->
-  <header class="app-header">
-    <div class="header-top">
-      <h1 class="app-title">Initiative Tracker</h1>
-      <button class="btn-icon" id="btn-settings" title="Impostazioni" data-i18n-title="settings_title">⚙️</button>
-    </div>
-    <div class="header-stats">
-      <div class="stat-round">
-        <span class="stat-label" data-i18n="round">Round</span>
-        <span class="stat-value" id="round-value">1</span>
-      </div>
-      <div class="stat-mode">
-        <span class="stat-label" data-i18n="mode">Modalità</span>
-        <span class="stat-value" id="mode-value">D&amp;D</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- ===================== BANNER TURNO ATTIVO (solo D&D/Fabula) ===================== -->
-  <section class="active-banner" id="active-banner" style="display:none;">
-    <div class="active-banner-label" data-i18n="acting_now">▶ AGISCE ORA</div>
-    <div class="active-banner-name" id="active-banner-name">—</div>
-    <div class="active-banner-hp" id="active-banner-hp"></div>
-    <button class="btn-next-turn" id="btn-next-turn" data-i18n="next_turn">⏭️ Prossimo Turno</button>
-  </section>
-
-  <!-- ===================== RESTORE BANNER ===================== -->
-  <div class="restore-banner" id="restore-banner" style="display:none;" data-i18n="restored">
-    Combattimento precedente ripristinato
-  </div>
-
-  <!-- ===================== LISTA COMBATTENTI ===================== -->
-  <main class="combatant-list-wrap">
-    <div id="combatant-list" class="combatant-list"></div>
-    <div class="empty-state" id="empty-state">
-      <p data-i18n="empty_state">Nessun combattente. Aggiungi il primo per iniziare!</p>
-    </div>
-  </main>
-
-  <!-- ===================== AZIONI RAPIDE ===================== -->
-  <section class="quick-actions">
-    <button class="btn-primary" id="btn-add-open" data-i18n="add_button">+ Aggiungi</button>
-    <button class="btn-secondary" id="btn-new-round" data-i18n="new_round_button">Nuovo Round</button>
-    <button class="btn-danger" id="btn-new-combat" data-i18n="new_combat_button">Nuovo Combattimento</button>
-  </section>
-
-  <!-- ===================== FOOTER ===================== -->
-  <footer class="app-footer">
-    <p data-i18n="credit">Creato da Noemi Marcolini</p>
-    <div class="footer-links">
-      <a href="https://ko-fi.com/noemimarcolini" target="_blank" rel="noopener" data-i18n="kofi_long">☕ Offrimi un caffè</a>
-      <a href="https://gdr-sys-portfolio2026.vercel.app/" target="_blank" rel="noopener" data-i18n="portfolio_long">🎲 Altri strumenti per GDR</a>
-    </div>
-  </footer>
-
-  <!-- ===================== TOAST ===================== -->
-  <div class="toast" id="toast"></div>
-
-  <!-- ===================== ROUND BANNER (overlay) ===================== -->
-  <div class="round-banner-overlay" id="round-banner-overlay">
-    <div class="round-banner-text" id="round-banner-text">ROUND 1!</div>
-  </div>
-
-  <!-- ===================== MODAL: AGGIUNGI COMBATTENTE ===================== -->
-  <div class="modal-overlay" id="modal-add">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 data-i18n="add_title">Aggiungi</h2>
-        <button class="btn-icon" data-close-modal="modal-add">✕</button>
-      </div>
-      <div class="modal-body">
-        <label class="field-label" data-i18n="name_label">Nome</label>
-        <input type="text" class="input-field" id="input-name" placeholder="Aldric il Guerriero" data-i18n-placeholder="name_placeholder">
-
-        <label class="field-label" data-i18n="type_label">Tipo</label>
-        <div class="radio-group" id="type-group">
-          <label class="radio-pill"><input type="radio" name="type" value="hero" checked><span data-i18n="type_hero">PG</span></label>
-          <label class="radio-pill"><input type="radio" name="type" value="villain"><span data-i18n="type_villain">Nemico</span></label>
-          <label class="radio-pill"><input type="radio" name="type" value="neutral"><span data-i18n="type_neutral">Neutrale</span></label>
-          <label class="radio-pill"><input type="radio" name="type" value="summon"><span data-i18n="type_summon">Evocazione</span></label>
-        </div>
-
-        <div id="init-field-group">
-          <label class="field-label" data-i18n="initiative_label">Iniziativa</label>
-          <div class="inline-field-row">
-            <input type="number" class="input-field" id="input-initiative" placeholder="18">
-            <button class="btn-secondary btn-roll" id="btn-roll-d20" data-i18n="roll_d20">🎲 Tira 1d20</button>
-          </div>
-        </div>
-
-        <div id="hp-field-group">
-          <label class="field-label" data-i18n="hp_label">HP</label>
-          <div class="inline-field-row">
-            <div class="field-col">
-              <span class="field-sublabel" data-i18n="hp_current_label">Attuali</span>
-              <input type="number" class="input-field" id="input-hp-current" placeholder="28">
+        <!-- Selezione modalità -->
+        <div class="section mode-section">
+            <h2>Modalità di gioco</h2>
+            <div class="mode-buttons">
+                <button class="btn btn-mode active" data-mode="dnd">⚔️ D&D</button>
+                <button class="btn btn-mode" data-mode="fabula">📖 Fabula Ultima</button>
+                <button class="btn btn-mode" data-mode="pbta">🎭 PbtA</button>
+                <button class="btn btn-mode" data-mode="7thsea">🏴‍☠️ 7th Sea</button>
             </div>
-            <div class="field-col">
-              <span class="field-sublabel" data-i18n="hp_max_label">Massimi</span>
-              <input type="number" class="input-field" id="input-hp-max" placeholder="45">
+            <p class="mode-description" id="modeDescription"></p>
+        </div>
+
+        <!-- Aggiunta personaggio -->
+        <div class="section add-section">
+            <h2>Aggiungi Personaggio</h2>
+            <div class="input-row" id="addInputs">
+                <!-- Generati dinamicamente in base alla modalità -->
             </div>
-          </div>
+            <button id="addBtn" class="btn btn-add">Aggiungi</button>
         </div>
 
-        <label class="field-label" data-i18n="add_multiple_label">Aggiungi Multipli</label>
-        <span class="field-hint" data-i18n="add_multiple_hint">Utile per gruppi di nemici identici</span>
-        <input type="number" class="input-field" id="input-count" min="1" value="1">
-
-        <button class="btn-primary" id="btn-confirm-add" data-i18n="add_confirm">Aggiungi al Combattimento</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== MODAL: SCHEDA COMBATTENTE ESPANSA ===================== -->
-  <div class="modal-overlay" id="modal-detail">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 id="detail-name">Nome</h2>
-        <button class="btn-icon" data-close-modal="modal-detail">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="detail-subtitle" id="detail-subtitle"></div>
-
-        <div id="detail-hp-block">
-          <div class="hp-text-large" id="detail-hp-text">28 / 45</div>
-          <div class="hp-bar-container">
-            <div class="hp-bar-fill" id="detail-hp-bar"></div>
-          </div>
-
-          <div class="counter-control counter-hp-quick">
-            <button class="counter-btn minus" data-hp-delta="-10">−10</button>
-            <button class="counter-btn minus" data-hp-delta="-5">−5</button>
-            <button class="counter-btn minus" data-hp-delta="-1">−1</button>
-            <span class="counter-value" id="detail-hp-current-value">28</span>
-            <button class="counter-btn plus" data-hp-delta="1">+1</button>
-            <button class="counter-btn plus" data-hp-delta="5">+5</button>
-            <button class="counter-btn plus" data-hp-delta="10">+10</button>
-          </div>
-
-          <div class="max-hp-row">
-            <span class="field-sublabel">HP Massimi</span>
-            <div class="counter-control">
-              <button class="counter-btn minus" data-hpmax-delta="-1">−</button>
-              <span class="counter-value" id="detail-hp-max-value">45</span>
-              <button class="counter-btn plus" data-hpmax-delta="1">+</button>
+        <!-- Controlli round/turno -->
+        <div class="section round-section">
+            <h2 id="roundLabel">Round: <span id="roundCounter">1</span></h2>
+            <div class="round-controls">
+                <button id="nextTurnBtn" class="btn btn-turn">Prossimo Turno ▶</button>
+                <button id="resetBtn" class="btn btn-reset">Reset ✕</button>
             </div>
-          </div>
         </div>
 
-        <label class="field-label" data-i18n="status_label">Status</label>
-        <div class="status-list" id="detail-status-list"></div>
-        <div class="inline-field-row">
-          <input type="text" class="input-field" id="input-new-status" placeholder="Es. Avvelenato" data-i18n-placeholder="status_placeholder">
-          <button class="btn-secondary" id="btn-add-status" data-i18n="status_add">+ Status</button>
+        <!-- Lista personaggi -->
+        <div class="tracker-list" id="trackerList"></div>
+
+        <!-- Sezione azioni (D&D: cura/attacco | 7th Sea: modifica raises) -->
+        <div class="section action-section" id="actionSection" style="display: none;">
+            <h2 id="actionTitle">Azione</h2>
+            <div class="input-row">
+                <select id="targetSelect">
+                    <option value="">-- Seleziona bersaglio --</option>
+                </select>
+                <input type="number" id="actionValue" placeholder="Valore" min="0">
+            </div>
+            <div class="action-buttons" id="actionButtons">
+                <!-- Generati dinamicamente -->
+            </div>
         </div>
 
-        <label class="field-label" data-i18n="initiative_label">Iniziativa</label>
-        <input type="number" class="input-field" id="detail-initiative-input">
+        <!-- Sezione PbtA: scelta del master -->
+        <div class="section pbta-section" id="pbtaSection" style="display: none;">
+            <h2>Turno di:</h2>
+            <div class="pbta-select-row">
+                <select id="pbtaSelect">
+                    <option value="">-- Scegli chi agisce --</option>
+                </select>
+                <button id="pbtaConfirmBtn" class="btn btn-turn">Conferma</button>
+            </div>
+        </div>
 
-        <label class="field-label" data-i18n="notes_label">Note</label>
-        <textarea class="input-field" id="detail-notes" rows="2" placeholder="Note libere..." data-i18n-placeholder="notes_placeholder"></textarea>
-
-        <button class="btn-secondary" id="btn-mark-acted" data-i18n="mark_acted">✓ Segna come Agito</button>
-        <button class="btn-danger" id="btn-remove-combatant" data-i18n="remove_combatant">🗑️ Rimuovi dal Combattimento</button>
-      </div>
+        <!-- Fabula Ultima: scelta fazione -->
+        <div class="section fabula-section" id="fabulaSection" style="display: none;">
+            <h2>Prossimo turno: <span id="fabulaFaction">Eroi</span></h2>
+            <div class="fabula-controls">
+                <select id="fabulaSelect">
+                    <option value="">-- Scegli chi agisce --</option>
+                </select>
+                <button id="fabulaConfirmBtn" class="btn btn-turn">Conferma</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- ===================== BOTTOM SHEET: DANNO/CURA ===================== -->
-  <div class="modal-overlay" id="modal-damage">
-    <div class="bottom-sheet">
-      <div class="bottom-sheet-header">
-        <span id="damage-title">Danno a: Aldric</span>
-        <span id="damage-current-hp">28 / 45</span>
-      </div>
-      <div class="counter-control counter-center">
-        <button class="counter-btn minus" id="dmg-decrease">−</button>
-        <span class="counter-value" id="dmg-amount">1</span>
-        <button class="counter-btn plus" id="dmg-increase">+</button>
-      </div>
-      <div class="dmg-presets">
-        <button class="btn-preset" data-dmg-preset="5">5</button>
-        <button class="btn-preset" data-dmg-preset="10">10</button>
-        <button class="btn-preset" data-dmg-preset="15">15</button>
-        <button class="btn-preset" data-dmg-preset="20">20</button>
-        <button class="btn-preset btn-preset-crit" id="btn-dmg-crit" data-i18n="critical_x2">CRITICO x2</button>
-      </div>
-      <button class="btn-primary" id="btn-apply-damage" data-i18n="apply">Applica</button>
-      <button class="btn-secondary" data-close-modal="modal-damage" data-i18n="cancel">Annulla</button>
-    </div>
-  </div>
-
-  <!-- ===================== MODAL: IMPOSTAZIONI ===================== -->
-  <div class="modal-overlay" id="modal-settings">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 data-i18n="settings_title">Impostazioni</h2>
-        <button class="btn-icon" data-close-modal="modal-settings">✕</button>
-      </div>
-      <div class="modal-body">
-        <label class="field-label" data-i18n="language_label">Lingua</label>
-        <div class="radio-group" id="lang-group">
-          <label class="radio-pill"><input type="radio" name="lang" value="it" checked><span>🇮🇹 Italiano</span></label>
-          <label class="radio-pill"><input type="radio" name="lang" value="en"><span>🇬🇧 English</span></label>
-        </div>
-
-        <label class="field-label" data-i18n="mode_section_label">Modalità Iniziativa</label>
-        <div class="mode-option" data-mode="dnd">
-          <label class="radio-row"><input type="radio" name="mode" value="dnd" checked><span><strong data-i18n="mode_dnd_title">D&amp;D / Numerica</strong><br><small data-i18n="mode_dnd_desc">Ordinamento per numero, turni individuali</small></span></label>
-        </div>
-        <div class="mode-option" data-mode="fabula">
-          <label class="radio-row"><input type="radio" name="mode" value="fabula"><span><strong data-i18n="mode_fabula_title">Fabula Ultima / Alternata</strong><br><small data-i18n="mode_fabula_desc">Turni alternati Eroi/Villain, nessun numero</small></span></label>
-        </div>
-        <div class="mode-option" data-mode="pbta">
-          <label class="radio-row"><input type="radio" name="mode" value="pbta"><span><strong data-i18n="mode_pbta_title">PbtA / Spotlight</strong><br><small data-i18n="mode_pbta_desc">Nessun ordine fisso, il Master decide</small></span></label>
-        </div>
-
-        <label class="field-label" data-i18n="options_label">Opzioni</label>
-        <label class="checkbox-row"><input type="checkbox" id="opt-sounds" checked> <span data-i18n="opt_sounds">Suoni</span></label>
-        <label class="checkbox-row"><input type="checkbox" id="opt-haptics" checked> <span data-i18n="opt_haptics">Vibrazione</span></label>
-        <label class="checkbox-row"><input type="checkbox" id="opt-animations" checked> <span data-i18n="opt_animations">Animazioni</span></label>
-        <label class="checkbox-row"><input type="checkbox" id="opt-largescreen"> <span data-i18n="opt_largescreen">Modalità schermo grande</span></label>
-
-        <label class="field-label" data-i18n="reset_label">Reset</label>
-        <button class="btn-secondary" id="btn-settings-new-combat" data-i18n="new_combat_button">Nuovo Combattimento</button>
-        <button class="btn-danger" id="btn-settings-clear-all" data-i18n="clear_all_button">Cancella Tutto e Ricomincia</button>
-
-        <div class="about-section">
-          <hr>
-          <p class="about-credit" data-i18n="credit">Creato da Noemi Marcolini</p>
-          <div class="footer-links">
-            <a href="https://ko-fi.com/noemimarcolini" target="_blank" rel="noopener">☕ Ko-fi</a>
-            <a href="https://gdr-sys-portfolio2026.vercel.app/" target="_blank" rel="noopener" data-i18n="portfolio_short">🎲 Altri tool GDR</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== MODAL: VITTORIA ===================== -->
-  <div class="modal-overlay" id="modal-victory">
-    <div class="modal-box victory-box">
-      <h2 class="victory-title" data-i18n="victory_title">🏆 VITTORIA!</h2>
-      <p data-i18n="victory_text">Tutti i nemici sono stati sconfitti.</p>
-      <div id="victory-summary"></div>
-      <button class="btn-primary" data-close-modal="modal-victory" data-i18n="close">Chiudi</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
