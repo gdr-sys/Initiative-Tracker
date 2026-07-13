@@ -1,11 +1,8 @@
 // =============================================================
-//  NAVIGATION
+//  NAVIGAZIONE
 // =============================================================
 
-let currentMode = null;
-
 function setMode(mode) {
-    currentMode = mode;
     document.getElementById('modeSelect').classList.add('hidden');
     document.getElementById('screenDnd').classList.add('hidden');
     document.getElementById('screenSea').classList.add('hidden');
@@ -23,6 +20,7 @@ function goBack() {
     document.getElementById('screenDnd').classList.add('hidden');
     document.getElementById('screenSea').classList.add('hidden');
     document.getElementById('modeSelect').classList.remove('hidden');
+    document.getElementById('modeSelect').style.display = 'flex';
 }
 
 // =============================================================
@@ -34,30 +32,29 @@ function generateId() {
 }
 
 // =============================================================
-//  D&D — STATO
+//  D&D 5e — TRACKER
 // =============================================================
 
 let dndCharacters = [];
 let dndTurnIndex = 0;
 let dndRoundNum = 1;
 
-// Gradiente fluido: verde (ratio=1) → giallo → arancione → rosso (ratio=0)
+// Gradiente fluido verde → giallo → arancione → rosso
 function getHpColor(ratio) {
     ratio = Math.max(0, Math.min(1, ratio));
     let r, g;
     if (ratio > 0.5) {
-        const t = (ratio - 0.5) * 2; // 1→0
+        const t = (ratio - 0.5) * 2;
         r = Math.round(220 * (1 - t));
         g = 200;
     } else {
-        const t = ratio * 2; // 1→0
+        const t = ratio * 2;
         r = 220;
         g = Math.round(200 * t);
     }
     return `rgb(${r}, ${g}, 40)`;
 }
 
-// --- Aggiungi personaggio ---
 function dndAddCharacter() {
     const name       = document.getElementById('dndName').value.trim();
     const initiative = parseInt(document.getElementById('dndInitiative').value);
@@ -71,27 +68,30 @@ function dndAddCharacter() {
 
     dndCharacters.push({
         id: generateId(),
-        name, initiative,
-        hpMax: hp, hpCurrent: hp, hpTemp: 0,
+        name,
+        initiative,
+        hpMax: hp,
+        hpCurrent: hp,
+        hpTemp: 0,
         ca
     });
 
     dndCharacters.sort((a, b) => b.initiative - a.initiative);
 
-    document.getElementById('dndName').value = '';
+    document.getElementById('dndName').value       = '';
     document.getElementById('dndInitiative').value = '';
-    document.getElementById('dndHp').value = '';
-    document.getElementById('dndCa').value = '';
+    document.getElementById('dndHp').value         = '';
+    document.getElementById('dndCa').value         = '';
     document.getElementById('dndName').focus();
 
     dndRender();
 }
 
-// --- Rimuovi personaggio ---
 function dndRemoveCharacter(id) {
     const i = dndCharacters.findIndex(c => c.id === id);
     if (i === -1) return;
     dndCharacters.splice(i, 1);
+
     if (dndCharacters.length === 0) {
         dndTurnIndex = 0;
     } else if (dndTurnIndex >= dndCharacters.length) {
@@ -101,7 +101,6 @@ function dndRemoveCharacter(id) {
     dndRender();
 }
 
-// --- Prossimo turno ---
 function dndNextTurn() {
     if (dndCharacters.length === 0) return;
     dndTurnIndex++;
@@ -112,7 +111,6 @@ function dndNextTurn() {
     dndRender();
 }
 
-// --- Reset ---
 function dndReset() {
     if (!confirm('Sei sicuro di voler resettare il tracker D&D?')) return;
     dndCharacters = [];
@@ -121,27 +119,26 @@ function dndReset() {
     dndRender();
 }
 
-// --- Cura ---
 function dndHeal() {
     const char = dndCharacters.find(c => c.id === document.getElementById('dndTarget').value);
     const val  = parseInt(document.getElementById('dndActionVal').value);
-    if (!char)              return alert('Seleziona un bersaglio!');
+    if (!char)                  return alert('Seleziona un bersaglio!');
     if (isNaN(val) || val <= 0) return alert('Valore non valido!');
+
     char.hpCurrent = Math.min(char.hpCurrent + val, char.hpMax);
     document.getElementById('dndActionVal').value = '';
     dndRender();
 }
 
-// --- Attacco ---
 function dndAttack() {
     const char = dndCharacters.find(c => c.id === document.getElementById('dndTarget').value);
     const val  = parseInt(document.getElementById('dndActionVal').value);
-    if (!char)              return alert('Seleziona un bersaglio!');
+    if (!char)                  return alert('Seleziona un bersaglio!');
     if (isNaN(val) || val <= 0) return alert('Valore non valido!');
 
     let dmg = val;
 
-    // Prima toglie dai PF temporanei
+    // Prima si tolgono i PF temporanei
     if (char.hpTemp > 0) {
         if (char.hpTemp >= dmg) {
             char.hpTemp -= dmg;
@@ -152,7 +149,7 @@ function dndAttack() {
         }
     }
 
-    // Poi dai PF normali
+    // Poi si tolgono i PF normali
     if (dmg > 0) {
         char.hpCurrent = Math.max(char.hpCurrent - dmg, 0);
     }
@@ -161,19 +158,18 @@ function dndAttack() {
     dndRender();
 }
 
-// --- PF Temporanei ---
 function dndAddTemp() {
     const char = dndCharacters.find(c => c.id === document.getElementById('dndTarget').value);
     const val  = parseInt(document.getElementById('dndActionVal').value);
-    if (!char)              return alert('Seleziona un bersaglio!');
+    if (!char)                  return alert('Seleziona un bersaglio!');
     if (isNaN(val) || val <= 0) return alert('Valore non valido!');
-    // Regola D&D 5e: non si sommano, si tiene il più alto
+
+    // Regola D&D 5e: PF temp non si sommano, si tiene il più alto
     char.hpTemp = Math.max(char.hpTemp, val);
     document.getElementById('dndActionVal').value = '';
     dndRender();
 }
 
-// --- Render D&D ---
 function dndRender() {
     document.getElementById('dndRound').textContent = dndRoundNum;
 
@@ -185,16 +181,16 @@ function dndRender() {
     }
 
     dndCharacters.forEach((char, index) => {
-        const isActive   = index === dndTurnIndex;
-        const isDead     = char.hpCurrent <= 0;
-        const hpRatio    = Math.max(char.hpCurrent / char.hpMax, 0);
-        const hpColor    = getHpColor(hpRatio);
-        const tempWidth  = Math.min(((char.hpCurrent + char.hpTemp) / char.hpMax) * 100, 100);
+        const isActive  = index === dndTurnIndex;
+        const isDead    = char.hpCurrent <= 0;
+        const hpRatio   = Math.max(char.hpCurrent / char.hpMax, 0);
+        const hpColor   = getHpColor(hpRatio);
+        const tempWidth = Math.min(((char.hpCurrent + char.hpTemp) / char.hpMax) * 100, 100);
 
         const card = document.createElement('div');
-        card.className = 'character-card' +
-            (isActive ? ' active-turn' : '') +
-            (isDead   ? ' dead'        : '');
+        card.className = 'character-card'
+            + (isActive ? ' active-turn' : '')
+            + (isDead   ? ' dead'        : '');
 
         card.innerHTML = `
             <div class="card-header">
@@ -233,20 +229,19 @@ function dndRender() {
     dndCharacters.forEach(c => {
         const opt = document.createElement('option');
         opt.value = c.id;
-        opt.textContent = `${c.name} (${c.hpCurrent}/${c.hpMax})`;
+        opt.textContent = `${c.name} (${c.hpCurrent}/${c.hpMax} HP)`;
         sel.appendChild(opt);
     });
     if (dndCharacters.find(c => c.id === prev)) sel.value = prev;
 }
 
 // =============================================================
-//  7TH SEA — STATO
+//  7TH SEA — RAISES TRACKER
 // =============================================================
 
-let seaCharacters  = [];
-let seaTurnIndex   = -1;
+let seaCharacters = [];
+let seaTurnIndex  = -1;
 
-// --- Ordina per raises rimanenti decrescenti ---
 function seaSort() {
     seaCharacters.sort((a, b) => {
         if (b.raisesRemaining !== a.raisesRemaining)
@@ -255,12 +250,11 @@ function seaSort() {
     });
 }
 
-// --- Aggiungi personaggio ---
 function seaAddCharacter() {
     const name   = document.getElementById('seaName').value.trim();
     const raises = parseInt(document.getElementById('seaRaises').value);
 
-    if (!name)                      return alert('Inserisci un nome!');
+    if (!name)                       return alert('Inserisci un nome!');
     if (isNaN(raises) || raises < 0) return alert('Inserisci un numero di raises valido!');
 
     seaCharacters.push({
@@ -281,11 +275,11 @@ function seaAddCharacter() {
     seaRender();
 }
 
-// --- Rimuovi personaggio ---
 function seaRemoveCharacter(id) {
     const i = seaCharacters.findIndex(c => c.id === id);
     if (i === -1) return;
     seaCharacters.splice(i, 1);
+
     if (seaCharacters.length === 0) {
         seaTurnIndex = -1;
     } else if (seaTurnIndex >= seaCharacters.length) {
@@ -294,7 +288,6 @@ function seaRemoveCharacter(id) {
     seaRender();
 }
 
-// --- Trova il prossimo con raises > 0 ---
 function seaFindNext() {
     for (let i = 0; i < seaCharacters.length; i++) {
         if (seaCharacters[i].raisesRemaining > 0) return i;
@@ -302,7 +295,6 @@ function seaFindNext() {
     return -1;
 }
 
-// --- Prossima azione ---
 function seaNextAction() {
     if (seaCharacters.length === 0) return;
 
@@ -325,7 +317,6 @@ function seaNextAction() {
     seaRender();
 }
 
-// --- Reset ---
 function seaReset() {
     if (!confirm('Sei sicuro di voler resettare il tracker 7th Sea?')) return;
     seaCharacters = [];
@@ -333,43 +324,42 @@ function seaReset() {
     seaRender();
 }
 
-// --- Aggiungi raises ---
 function seaAddRaises() {
     const char = seaCharacters.find(c => c.id === document.getElementById('seaTarget').value);
     const val  = parseInt(document.getElementById('seaModVal').value);
-    if (!char)              return alert('Seleziona un personaggio!');
+    if (!char)                  return alert('Seleziona un personaggio!');
     if (isNaN(val) || val <= 0) return alert('Valore non valido!');
+
     char.raisesRemaining += val;
     char.raisesTotal     += val;
     seaSort();
     seaRender();
 }
 
-// --- Rimuovi raises ---
 function seaRemoveRaises() {
     const char = seaCharacters.find(c => c.id === document.getElementById('seaTarget').value);
     const val  = parseInt(document.getElementById('seaModVal').value);
-    if (!char)              return alert('Seleziona un personaggio!');
+    if (!char)                  return alert('Seleziona un personaggio!');
     if (isNaN(val) || val <= 0) return alert('Valore non valido!');
+
     char.raisesRemaining = Math.max(char.raisesRemaining - val, 0);
     seaSort();
     if (seaFindNext() === -1) seaTurnIndex = -1;
     seaRender();
 }
 
-// --- Imposta raises ---
 function seaSetRaises() {
     const char = seaCharacters.find(c => c.id === document.getElementById('seaTarget').value);
     const val  = parseInt(document.getElementById('seaModVal').value);
-    if (!char)             return alert('Seleziona un personaggio!');
+    if (!char)                 return alert('Seleziona un personaggio!');
     if (isNaN(val) || val < 0) return alert('Valore non valido!');
+
     char.raisesRemaining = val;
     char.raisesTotal     = Math.max(char.raisesTotal, val);
     seaSort();
     seaRender();
 }
 
-// --- Render 7th Sea ---
 function seaRender() {
     const cur = document.getElementById('seaCurrent');
     if (seaTurnIndex >= 0 && seaTurnIndex < seaCharacters.length) {
@@ -384,7 +374,6 @@ function seaRender() {
 
     if (seaCharacters.length === 0) {
         list.innerHTML = '<p class="empty-msg">Nessun personaggio aggiunto.</p>';
-        // Aggiorna select vuota
         document.getElementById('seaTarget').innerHTML =
             '<option value="">-- Seleziona personaggio --</option>';
         return;
@@ -395,9 +384,9 @@ function seaRender() {
         const isExhausted = char.raisesRemaining === 0;
 
         const card = document.createElement('div');
-        card.className = 'character-card sea-card' +
-            (isActive    ? ' active-turn' : '') +
-            (isExhausted ? ' exhausted'   : '');
+        card.className = 'character-card sea-card'
+            + (isActive    ? ' active-turn' : '')
+            + (isExhausted ? ' exhausted'   : '');
 
         // Pallini raises
         let dotsHtml = '';
@@ -443,24 +432,29 @@ function seaRender() {
 
 document.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
+    const id = document.activeElement.id;
 
-    // D&D: aggiungi con Enter nei campi input
-    const dndFields = ['dndName','dndInitiative','dndHp','dndCa'];
-    if (dndFields.includes(document.activeElement.id)) {
+    // D&D: Enter nei campi → aggiungi
+    if (['dndName', 'dndInitiative', 'dndHp', 'dndCa'].includes(id)) {
         dndAddCharacter();
         return;
     }
 
     // D&D: Enter nel campo valore azione → attacca
-    if (document.activeElement.id === 'dndActionVal') {
+    if (id === 'dndActionVal') {
         dndAttack();
         return;
     }
 
-    // 7th Sea: aggiungi con Enter
-    const seaFields = ['seaName','seaRaises'];
-    if (seaFields.includes(document.activeElement.id)) {
+    // 7th Sea: Enter nei campi → aggiungi
+    if (['seaName', 'seaRaises'].includes(id)) {
         seaAddCharacter();
+        return;
+    }
+
+    // 7th Sea: Enter nel campo modifica → rimuovi raises
+    if (id === 'seaModVal') {
+        seaRemoveRaises();
         return;
     }
 });
