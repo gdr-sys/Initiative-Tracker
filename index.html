@@ -7,76 +7,138 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+
+    <!-- ===== SCHERMATA SELEZIONE MODALITÀ ===== -->
+    <div id="modeSelect" class="screen">
         <h1>🎲 Initiative Tracker</h1>
-
-        <!-- Selezione modalità -->
-        <div class="section mode-section">
-            <h2>Modalità di gioco</h2>
-            <div class="mode-buttons">
-                <button class="btn btn-mode active" data-mode="dnd">⚔️ D&D</button>
-                <button class="btn btn-mode" data-mode="fabula">📖 Fabula Ultima</button>
-                <button class="btn btn-mode" data-mode="pbta">🎭 PbtA</button>
-                <button class="btn btn-mode" data-mode="7thsea">🏴‍☠️ 7th Sea</button>
-            </div>
-            <p class="mode-description" id="modeDescription"></p>
+        <div class="mode-cards">
+            <button class="mode-card dnd" onclick="setMode('dnd')">
+                <span class="mode-emoji">⚔️</span>
+                <span class="mode-label">D&D 5e</span>
+            </button>
+            <button class="mode-card sea" onclick="setMode('sea')">
+                <span class="mode-emoji">🏴‍☠️</span>
+                <span class="mode-label">7th Sea</span>
+            </button>
         </div>
-
-        <!-- Aggiunta personaggio -->
-        <div class="section add-section">
-            <h2>Aggiungi Personaggio</h2>
-            <div class="input-row" id="addInputs">
-                <!-- Generati dinamicamente in base alla modalità -->
+        <footer class="site-footer">
+            <div class="footer-links">
+                <a href="https://gdr-sys-portfolio2026.vercel.app/#contact" target="_blank">📁 Portfolio</a>
+                <a href="https://gdr-toolbox.noemi-marcolini.workers.dev/" target="_blank">🧰 GDR Toolbox</a>
+                <a href="https://ko-fi.com/noemimarcolini" target="_blank">☕ Ko-fi</a>
+                <a href="https://www.instagram.com/gdrsys_tools?igsh=MW02NHRoNTdsMTZxeQ==" target="_blank">📷 Instagram</a>
             </div>
-            <button id="addBtn" class="btn btn-add">Aggiungi</button>
+            <p class="footer-credit">Made by <strong>GDR-Sys</strong></p>
+        </footer>
+    </div>
+
+    <!-- ===== TRACKER D&D ===== -->
+    <div id="screenDnd" class="screen hidden">
+        <div class="container">
+            <div class="top-bar">
+                <button class="back-btn" onclick="goBack()">← Menu</button>
+                <h1>⚔️ D&D Initiative Tracker</h1>
+            </div>
+
+            <div class="card-section">
+                <h2>Aggiungi Personaggio</h2>
+                <div class="input-row">
+                    <input type="text" id="dndName" placeholder="Nome">
+                    <input type="number" id="dndInitiative" placeholder="Iniziativa">
+                    <input type="number" id="dndHp" placeholder="HP Max">
+                    <input type="number" id="dndCa" placeholder="CA">
+                </div>
+                <button class="btn btn-add" onclick="dndAddCharacter()">Aggiungi</button>
+            </div>
+
+            <div class="card-section round-section">
+                <h2>Round: <span id="dndRound">1</span></h2>
+                <div class="row-buttons">
+                    <button class="btn btn-turn" onclick="dndNextTurn()">Prossimo Turno ▶</button>
+                    <button class="btn btn-reset" onclick="dndReset()">Reset ✕</button>
+                </div>
+            </div>
+
+            <div id="dndList" class="tracker-list"></div>
+
+            <div class="card-section">
+                <h2>Azione</h2>
+                <div class="input-row">
+                    <select id="dndTarget">
+                        <option value="">-- Seleziona bersaglio --</option>
+                    </select>
+                    <input type="number" id="dndActionVal" placeholder="Valore" min="0">
+                </div>
+                <div class="row-buttons">
+                    <button class="btn btn-heal" onclick="dndHeal()">❤️ Cura</button>
+                    <button class="btn btn-attack" onclick="dndAttack()">🗡️ Attacco</button>
+                    <button class="btn btn-temp" onclick="dndAddTemp()">🛡️ PF Temp</button>
+                </div>
+            </div>
+
+            <footer class="site-footer">
+                <div class="footer-links">
+                    <a href="https://gdr-sys-portfolio2026.vercel.app/#contact" target="_blank">📁 Portfolio</a>
+                    <a href="https://gdr-toolbox.noemi-marcolini.workers.dev/" target="_blank">🧰 GDR Toolbox</a>
+                    <a href="https://ko-fi.com/noemimarcolini" target="_blank">☕ Ko-fi</a>
+                    <a href="https://www.instagram.com/gdrsys_tools?igsh=MW02NHRoNTdsMTZxeQ==" target="_blank">📷 Instagram</a>
+                </div>
+                <p class="footer-credit">Made by <strong>GDR-Sys</strong></p>
+            </footer>
         </div>
+    </div>
 
-        <!-- Controlli round/turno -->
-        <div class="section round-section">
-            <h2 id="roundLabel">Round: <span id="roundCounter">1</span></h2>
-            <div class="round-controls">
-                <button id="nextTurnBtn" class="btn btn-turn">Prossimo Turno ▶</button>
-                <button id="resetBtn" class="btn btn-reset">Reset ✕</button>
+    <!-- ===== TRACKER 7TH SEA ===== -->
+    <div id="screenSea" class="screen hidden">
+        <div class="container">
+            <div class="top-bar">
+                <button class="back-btn" onclick="goBack()">← Menu</button>
+                <h1>🏴‍☠️ 7th Sea — Raises</h1>
             </div>
-        </div>
 
-        <!-- Lista personaggi -->
-        <div class="tracker-list" id="trackerList"></div>
+            <div class="card-section">
+                <h2>Aggiungi Personaggio</h2>
+                <div class="input-row">
+                    <input type="text" id="seaName" placeholder="Nome">
+                    <input type="number" id="seaRaises" placeholder="Raises" min="0">
+                </div>
+                <button class="btn btn-add-sea" onclick="seaAddCharacter()">Aggiungi</button>
+            </div>
 
-        <!-- Sezione azioni (D&D: cura/attacco | 7th Sea: modifica raises) -->
-        <div class="section action-section" id="actionSection" style="display: none;">
-            <h2 id="actionTitle">Azione</h2>
-            <div class="input-row">
-                <select id="targetSelect">
-                    <option value="">-- Seleziona bersaglio --</option>
-                </select>
-                <input type="number" id="actionValue" placeholder="Valore" min="0">
+            <div class="card-section round-section">
+                <h2>Azione corrente: <span id="seaCurrent">—</span></h2>
+                <div class="row-buttons">
+                    <button class="btn btn-turn" onclick="seaNextAction()">Prossima Azione ▶</button>
+                    <button class="btn btn-reset" onclick="seaReset()">Reset ✕</button>
+                </div>
             </div>
-            <div class="action-buttons" id="actionButtons">
-                <!-- Generati dinamicamente -->
-            </div>
-        </div>
 
-        <!-- Sezione PbtA: scelta del master -->
-        <div class="section pbta-section" id="pbtaSection" style="display: none;">
-            <h2>Turno di:</h2>
-            <div class="pbta-select-row">
-                <select id="pbtaSelect">
-                    <option value="">-- Scegli chi agisce --</option>
-                </select>
-                <button id="pbtaConfirmBtn" class="btn btn-turn">Conferma</button>
-            </div>
-        </div>
+            <div id="seaList" class="tracker-list"></div>
 
-        <!-- Fabula Ultima: scelta fazione -->
-        <div class="section fabula-section" id="fabulaSection" style="display: none;">
-            <h2>Prossimo turno: <span id="fabulaFaction">Eroi</span></h2>
-            <div class="fabula-controls">
-                <select id="fabulaSelect">
-                    <option value="">-- Scegli chi agisce --</option>
-                </select>
-                <button id="fabulaConfirmBtn" class="btn btn-turn">Conferma</button>
+            <div class="card-section">
+                <h2>Modifica Raises</h2>
+                <div class="input-row">
+                    <select id="seaTarget">
+                        <option value="">-- Seleziona personaggio --</option>
+                    </select>
+                    <input type="number" id="seaModVal" placeholder="Quantità" min="1" value="1">
+                </div>
+                <div class="row-buttons">
+                    <button class="btn btn-heal" onclick="seaAddRaises()">➕ Aggiungi</button>
+                    <button class="btn btn-attack" onclick="seaRemoveRaises()">➖ Rimuovi</button>
+                    <button class="btn btn-temp" onclick="seaSetRaises()">✏️ Imposta</button>
+                </div>
             </div>
+
+            <footer class="site-footer">
+                <div class="footer-links">
+                    <a href="https://gdr-sys-portfolio2026.vercel.app/#contact" target="_blank">📁 Portfolio</a>
+                    <a href="https://gdr-toolbox.noemi-marcolini.workers.dev/" target="_blank">🧰 GDR Toolbox</a>
+                    <a href="https://ko-fi.com/noemimarcolini" target="_blank">☕ Ko-fi</a>
+                    <a href="https://www.instagram.com/gdrsys_tools?igsh=MW02NHRoNTdsMTZxeQ==" target="_blank">📷 Instagram</a>
+                </div>
+                <p class="footer-credit">Made by <strong>GDR-Sys</strong></p>
+            </footer>
         </div>
     </div>
 
